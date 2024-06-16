@@ -22,11 +22,11 @@ class FenwickTree(Generic[T]):
     size: int
 
     @classmethod
-    def zeroed_of_size(cls, size: int, zero: T) -> "FenwickTree":
+    def zeroed_of_size(cls, size: int, zero: T) -> Self:
         return cls(zero=zero, bit=[zero for _ in range(size)], size=size)
 
     @classmethod
-    def of_values(cls, values: List[T], zero: T) -> "FenwickTree":
+    def of_values(cls, values: List[T], zero: T) -> Self:
         return cls(zero=zero, bit=values, size=len(values))
 
     def prefix_sum(self, right_inclusive: Index) -> T:
