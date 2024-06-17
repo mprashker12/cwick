@@ -27,7 +27,10 @@ class FenwickTree(Generic[T]):
 
     @classmethod
     def of_values(cls, values: List[T], zero: T) -> Self:
-        return cls(zero=zero, bit=values, size=len(values))
+        ft = cls.zeroed_of_size(size=len(values), zero=zero)
+        for idx, v in enumerate(values):
+            ft.add(idx=idx, delta=v)
+        return ft
 
     def prefix_sum(self, right_inclusive: Index) -> T:
         i: Index = right_inclusive
@@ -38,14 +41,10 @@ class FenwickTree(Generic[T]):
         return s
 
     def range_sum(self, left_inclusive: Index, right_inclusive: Index) -> T:
-        return (
-            self.prefix_sum(right_inclusive)
-            - self.prefix_sum(left_inclusive)
-            + self.bit[left_inclusive]
-        )
+        return self.prefix_sum(right_inclusive) - self.prefix_sum(left_inclusive - 1)
 
     def add(self, idx: Index, delta: T):
         i: Index = idx
         while i < self.size:
             self.bit[i] += delta
-            i = idx | (idx + 1)
+            i = i | (i + 1)
